@@ -1,0 +1,5 @@
+name: BelvensMobBuffs
+main: belven.mobs.MobManager
+version: 1
+
+
