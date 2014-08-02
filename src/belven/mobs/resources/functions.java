@@ -3,80 +3,13 @@ package belven.mobs.resources;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.MagmaCube;
-import org.bukkit.entity.Slime;
 import org.bukkit.potion.PotionEffectType;
 
-public class functions
-{
-    public static boolean IsAMob(EntityType currentEntityType)
-    {
-        if (currentEntityType == EntityType.BLAZE
-                || currentEntityType == EntityType.CAVE_SPIDER
-                || currentEntityType == EntityType.CREEPER
-                || currentEntityType == EntityType.ENDER_DRAGON
-                || currentEntityType == EntityType.ENDERMAN
-                || currentEntityType == EntityType.GHAST
-                || currentEntityType == EntityType.MAGMA_CUBE
-                || currentEntityType == EntityType.PIG_ZOMBIE
-                || currentEntityType == EntityType.SKELETON
-                || currentEntityType == EntityType.SPIDER
-                || currentEntityType == EntityType.SLIME
-                || currentEntityType == EntityType.WITCH
-                || currentEntityType == EntityType.WITHER
-                || currentEntityType == EntityType.ZOMBIE)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+import resources.Functions;
 
-    // public static void Temp()
-    // {
-    // int[][] locations = new int[10][10];
-    //
-    // }
-    //
-    // public static int[][] randomLocation(int[][] lastLocation)
-    // {
-    // Random randGen = new Random();
-    // int rand = randGen.nextInt(1);
-    // int[] x = lastLocation[0];
-    // int y = lastLocation[0][0];
-    //
-    // Map<Integer, Integer> tempLocation;
-    //
-    // if (rand == 0)
-    // {
-    //
-    // }
-    // else
-    // {
-    //
-    // }
-    //
-    // return tempLocation;
-    // }
+public class functions{
 
-    public static boolean IsUndeadMob(EntityType currentEntityType)
-    {
-        if (currentEntityType == EntityType.PIG_ZOMBIE
-                || currentEntityType == EntityType.SKELETON
-                || currentEntityType == EntityType.WITHER
-                || currentEntityType == EntityType.ZOMBIE)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    
 
     public static List<PotionEffectType> negativeEffects()
     {
@@ -151,8 +84,8 @@ public class functions
         return 1;
     }
 
-    public static int getPotionEffectMaxDuration(PotionEffectType pet)
-    {
+    public static int getPotionEffectMaxDuration(PotionEffectType pet){
+    	
         int dur = 30;
 
         if (pet == PotionEffectType.ABSORPTION)
@@ -200,7 +133,7 @@ public class functions
             dur = 20;
         }
 
-        return SecondsToTicks(dur);
+        return Functions.SecondsToTicks(dur);
     }
 
     public static PotionEffectType undeadReveseEffects(PotionEffectType pet)
@@ -256,91 +189,4 @@ public class functions
         return tempEffects;
     }
 
-    public static int SecondsToTicks(int seconds)
-    {
-        return (seconds * 20);
-    }
-
-    public static int MobMaxHealth(LivingEntity entity)
-    {
-        if (entity.getType() == EntityType.ZOMBIE)
-        {
-            return 20;
-        }
-        else if (entity.getType() == EntityType.SKELETON)
-        {
-            return 20;
-        }
-        else if (entity.getType() == EntityType.SPIDER)
-        {
-            return 16;
-        }
-        else if (entity.getType() == EntityType.CREEPER)
-        {
-            return 20;
-        }
-        else if (entity.getType() == EntityType.WITHER)
-        {
-            return 300;
-        }
-        else if (entity.getType() == EntityType.BLAZE)
-        {
-            return 20;
-        }
-        else if (entity.getType() == EntityType.ENDERMAN)
-        {
-            return 40;
-        }
-        else if (entity.getType() == EntityType.CAVE_SPIDER)
-        {
-            return 12;
-        }
-        else if (entity.getType() == EntityType.GHAST)
-        {
-            return 10;
-        }
-        else if (entity.getType() == EntityType.MAGMA_CUBE)
-        {
-            MagmaCube MagmaCube = (MagmaCube) entity;
-
-            if (MagmaCube.getSize() == 4)
-
-            {
-                return 16;
-            }
-            else if (MagmaCube.getSize() == 2)
-            {
-                return 4;
-            }
-            else
-            {
-                return 1;
-            }
-        }
-        else if (entity.getType() == EntityType.PIG_ZOMBIE)
-        {
-            return 20;
-        }
-        else if (entity.getType() == EntityType.SLIME)
-        {
-            Slime slime = (Slime) entity;
-
-            if (slime.getSize() == 4)
-            {
-                return 16;
-            }
-            else if (slime.getSize() == 2)
-            {
-                return 4;
-            }
-            else
-            {
-                return 1;
-            }
-        }
-        else
-        {
-            return 20;
-        }
-    }
 }

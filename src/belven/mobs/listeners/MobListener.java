@@ -10,6 +10,8 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import resources.EntityFunctions;
+
 import belven.mobs.MobManager;
 import belven.mobs.resources.functions;
 
@@ -25,9 +27,9 @@ public class MobListener implements Listener
     }
 
     @EventHandler
-    public void onCreatureSpawnEvent(CreatureSpawnEvent event)
-    {
-        if (functions.IsAMob(event.getEntityType()))
+    public void onCreatureSpawnEvent(CreatureSpawnEvent event){
+    	
+        if (EntityFunctions.IsAMob(event.getEntityType()))
         {
             LivingEntity le = event.getEntity();
 
