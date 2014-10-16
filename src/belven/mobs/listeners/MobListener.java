@@ -31,16 +31,13 @@ public class MobListener implements Listener {
 
 			PotionEffectType positiveEffect = getPositiveEffect(le);
 			int posAmplifier = functions.getPotionEffectMaxAmp(positiveEffect);
-			int posDuration = functions
-					.getPotionEffectMaxDuration(positiveEffect);
+			int posDuration = functions.getPotionEffectMaxDuration(positiveEffect);
 
 			PotionEffectType negativeEffect = getNegativeEffect(le);
 			int negAmplifier = functions.getPotionEffectMaxAmp(positiveEffect);
-			int negDuration = functions
-					.getPotionEffectMaxDuration(positiveEffect);
+			int negDuration = functions.getPotionEffectMaxDuration(positiveEffect);
 
-			PotionEffect positive = new PotionEffect(positiveEffect,
-					posDuration, posAmplifier);
+			PotionEffect positive = new PotionEffect(positiveEffect, posDuration, posAmplifier);
 
 			new PotionEffect(negativeEffect, negDuration, negAmplifier);
 
