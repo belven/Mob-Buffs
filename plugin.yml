@@ -1,5 +1,6 @@
 name: BelvensMobBuffs
 main: belven.mobs.MobBuffManager
 version: 1
+depend: [Resources]
 
 
