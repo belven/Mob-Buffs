@@ -50,7 +50,7 @@ public class functions {
 		} else if (pet == PotionEffectType.INVISIBILITY) {
 			return 1;
 		} else if (pet == PotionEffectType.SPEED) {
-			return 4;
+			return 1;
 		} else if (pet == PotionEffectType.POISON) {
 			return 6;
 		} else if (pet == PotionEffectType.SLOW) {
