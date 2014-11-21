@@ -78,7 +78,7 @@ public class MobListener implements Listener {
 	public double getDamageToDo(LivingEntity damager, LivingEntity damageEntity) {
 		double baseDamage = 0.08;
 		double bonusDamage = getWeaponBonus(damager.getEquipment().getItemInHand());
-		double armourReduction = getArmourReduction(damager.getEquipment().getArmorContents());
+		double armourReduction = getArmourReduction(damageEntity.getEquipment().getArmorContents());
 
 		return baseDamage + bonusDamage - armourReduction;
 	}
@@ -96,13 +96,13 @@ public class MobListener implements Listener {
 	public double getArmourGadeValue(ItemStack is) {
 		String grade = is.getType().toString();
 		if (grade.contains("LEATHER")) {
-			return 0.007 + getEnchantmentBonus(is);
+			return 0.0225 + getEnchantmentBonus(is);
 		} else if (grade.contains("IRON")) {
-			return 0.010 + getEnchantmentBonus(is);
+			return 0.0375 + getEnchantmentBonus(is);
 		} else if (grade.contains("GOLD")) {
-			return 0.007 + getEnchantmentBonus(is);
+			return 0.0200 + getEnchantmentBonus(is);
 		} else if (grade.contains("DIAMOND")) {
-			return 0.020 + getEnchantmentBonus(is);
+			return 0.0500 + getEnchantmentBonus(is);
 		}
 
 		return 0;
@@ -128,11 +128,11 @@ public class MobListener implements Listener {
 
 	private double getEnchantmentBonus(ItemStack is) {
 		if (is.containsEnchantment(Enchantment.ARROW_DAMAGE)) {
-			return is.getEnchantmentLevel(Enchantment.ARROW_DAMAGE);
+			return is.getEnchantmentLevel(Enchantment.ARROW_DAMAGE) / 100.0;
 		} else if (is.containsEnchantment(Enchantment.DAMAGE_ALL)) {
-			return is.getEnchantmentLevel(Enchantment.DAMAGE_ALL);
+			return is.getEnchantmentLevel(Enchantment.DAMAGE_ALL) / 100.0;
 		} else if (is.containsEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL)) {
-			return is.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+			return is.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL) / 100.0;
 		}
 		return 0;
 	}
