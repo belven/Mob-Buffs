@@ -7,6 +7,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -54,7 +55,7 @@ public class MobListener implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 		LivingEntity damager = EntityFunctions.GetDamager(event);
 		LivingEntity damageEntity = (LivingEntity) event.getEntity();
