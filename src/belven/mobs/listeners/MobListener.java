@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import resources.EntityFunctions;
@@ -55,39 +56,86 @@ public class MobListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 		LivingEntity damager = EntityFunctions.GetDamager(event);
+
+		if (!(event.getEntity() instanceof LivingEntity)) {
+			return;
+		}
+
 		LivingEntity damageEntity = (LivingEntity) event.getEntity();
 		Damageable damagedEntity = damageEntity;
+
+		if (damager == null) {
+			return;
+		}
 
 		double maxPercent = getDamageToDo(damager, damageEntity);
 		double maxDamage = maxPercent * damagedEntity.getMaxHealth();
 
 		event.setDamage(maxDamage);
+
 		if (EntityFunctions.IsAMob(damagedEntity.getType())) {
 			damageEntity.setNoDamageTicks(5);
 		} else {
 			damageEntity.setNoDamageTicks(20);
 		}
 
-		damager.getEquipment().getItemInHand()
-				.setDurability((short) (damager.getEquipment().getItemInHand().getDurability() - 10));
+		// damager.getEquipment().getItemInHand()
+		// .setDurability((short)
+		// (damager.getEquipment().getItemInHand().getDurability() - 10));
 	}
 
 	public double getDamageToDo(LivingEntity damager, LivingEntity damageEntity) {
-		double baseDamage = 0.08;
+		double baseDamage = 0.05;
 		double bonusDamage = getWeaponBonus(damager.getEquipment().getItemInHand());
 		double armourReduction = getArmourReduction(damageEntity.getEquipment().getArmorContents());
+		double potionDamageBonus = getPotionDamageBonus(damager);
+		double potionArmourBonus = getPotionArmourBonus(damageEntity);
 
-		return baseDamage + bonusDamage - armourReduction;
+		double finalDamage = baseDamage + bonusDamage + potionDamageBonus - armourReduction - potionArmourBonus;
+
+		return finalDamage > 0 ? finalDamage : 0.05;
+	}
+
+	private double getPotionArmourBonus(LivingEntity le) {
+		int amp = 0;
+
+		if (le.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
+			amp = getPotionStrength(le, PotionEffectType.DAMAGE_RESISTANCE);
+			return amp != 0 ? amp * 20 / 100.0 : 0;
+		}
+		return amp;
+	}
+
+	private double getPotionDamageBonus(LivingEntity le) {
+		int amp = 0;
+
+		if (le.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) {
+			amp = getPotionStrength(le, PotionEffectType.INCREASE_DAMAGE);
+			return amp != 0 ? amp * 2 / 100.0 : 0;
+		}
+		return amp;
+	}
+
+	public int getPotionStrength(LivingEntity damageEntity, PotionEffectType pet) {
+		for (PotionEffect pe : damageEntity.getActivePotionEffects()) {
+			if (pe.getType() == pet) {
+				return pe.getAmplifier();
+			}
+		}
+
+		return 0;
 	}
 
 	private double getArmourReduction(ItemStack[] armorContents) {
 		double totalValue = 0;
 
 		for (ItemStack is : armorContents) {
-			totalValue += getArmourGadeValue(is);
+			if (is != null) {
+				totalValue += getArmourGadeValue(is);
+			}
 		}
 
 		return totalValue;
@@ -102,28 +150,33 @@ public class MobListener implements Listener {
 		} else if (grade.contains("GOLD")) {
 			return 0.0200 + getEnchantmentBonus(is);
 		} else if (grade.contains("DIAMOND")) {
-			return 0.0500 + getEnchantmentBonus(is);
+			return 0.0300 + getEnchantmentBonus(is);
 		}
 
 		return 0;
 	}
 
 	private double getWeaponBonus(ItemStack itemInHand) {
-
-		switch (itemInHand.getType()) {
-		case WOOD_SWORD:
-			return 0.075 + getEnchantmentBonus(itemInHand);
-		case STONE_SWORD:
-			return 0.100 + getEnchantmentBonus(itemInHand);
-		case GOLD_SWORD:
-			return 0.125 + getEnchantmentBonus(itemInHand);
-		case IRON_SWORD:
-			return 0.150 + getEnchantmentBonus(itemInHand);
-		case DIAMOND_SWORD:
-			return 0.200 + getEnchantmentBonus(itemInHand);
-		default:
-			return 0;
+		if (itemInHand != null) {
+			switch (itemInHand.getType()) {
+			case WOOD_SWORD:
+				return 0.075 + getEnchantmentBonus(itemInHand);
+			case STONE_SWORD:
+				return 0.100 + getEnchantmentBonus(itemInHand);
+			case GOLD_SWORD:
+				return 0.125 + getEnchantmentBonus(itemInHand);
+			case IRON_SWORD:
+				return 0.150 + getEnchantmentBonus(itemInHand);
+			case DIAMOND_SWORD:
+				return 0.200 + getEnchantmentBonus(itemInHand);
+			case BOW:
+				return 0.150 + getEnchantmentBonus(itemInHand);
+			default:
+				return 0.03;
+			}
 		}
+
+		return 0.03;
 	}
 
 	private double getEnchantmentBonus(ItemStack is) {
