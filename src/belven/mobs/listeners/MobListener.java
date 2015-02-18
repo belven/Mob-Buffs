@@ -15,9 +15,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import resources.EntityFunctions;
 import belven.mobs.MobBuffManager;
 import belven.mobs.resources.functions;
+import belven.resources.EntityFunctions;
 
 public class MobListener implements Listener {
 	private final MobBuffManager plugin;

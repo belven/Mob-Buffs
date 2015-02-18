@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.potion.PotionEffectType;
 
-import resources.Functions;
+import belven.resources.Functions;
 
 public class functions {
 	final static int SECOND = 1;
