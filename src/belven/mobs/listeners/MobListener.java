@@ -16,6 +16,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import belven.mobs.MobBuffManager;
+import belven.mobs.Warrior;
 import belven.mobs.resources.functions;
 import belven.resources.EntityFunctions;
 
@@ -32,7 +33,8 @@ public class MobListener implements Listener {
 	public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
 
 		if (EntityFunctions.IsAMob(event.getEntityType())) {
-			// LivingEntity le = event.getEntity();
+			LivingEntity le = event.getEntity();
+			plugin.AddMobClass(le, new Warrior(le.getMaxHealth() / 2, le, plugin));
 			//
 			// PotionEffectType positiveEffect = getPositiveEffect(le);
 			// int posAmplifier =
@@ -69,6 +71,16 @@ public class MobListener implements Listener {
 
 		if (damager == null) {
 			return;
+		}
+
+		// This entity has been hit
+		if (plugin.GetClass(damageEntity) != null) {
+			plugin.GetClass(damageEntity).SelfTakenDamage(event);
+		}
+
+		// This entity hit something
+		if (plugin.GetClass(damager) != null) {
+			plugin.GetClass(damager).SelfDamageOther(event);
 		}
 
 		double maxPercent = getDamageToDo(damager, damageEntity);
