@@ -6,6 +6,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import belven.mob.classes.MobClass;
 import belven.mobs.listeners.MobListener;
 
 public class MobBuffManager extends JavaPlugin {

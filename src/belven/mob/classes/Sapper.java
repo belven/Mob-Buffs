@@ -1,30 +1,32 @@
-package belven.mobs;
+package belven.mob.classes;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import belven.mobs.MobBuffManager;
 import belven.mobs.abilities.Ability;
-import belven.mobs.abilities.Pop;
+import belven.mobs.abilities.Slow;
+import belven.mobs.abilities.StealLife;
 
-public class Warrior extends MobClass {
+public class Sapper extends MobClass {
 
-	public Warrior(double health, LivingEntity classOwner, MobBuffManager instance) {
+	public Sapper(double health, LivingEntity classOwner, MobBuffManager instance) {
 		super(health, classOwner, instance);
 		SetAbilities();
+		SortAbilities();
 	}
 
 	@Override
 	public void SelfCast(Player currentPlayer) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void SetAbilities() {
-		Abilities.add(new Pop(this, 1, 1));
-
+		Abilities.add(new StealLife(this, 10, 1));
+		Abilities.add(new Slow(this, 1, 1));
 	}
 
 	@Override

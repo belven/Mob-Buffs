@@ -1,4 +1,4 @@
-package belven.mobs;
+package belven.mob.classes;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
+import belven.mobs.MobBuffManager;
 import belven.mobs.abilities.Ability;
 import belven.mobs.timedevents.AbilityCooldown;
 import belven.resources.EntityFunctions;

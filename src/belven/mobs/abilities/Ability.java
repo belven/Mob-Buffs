@@ -1,6 +1,6 @@
 package belven.mobs.abilities;
 
-import belven.mobs.MobClass;
+import belven.mob.classes.MobClass;
 
 public abstract class Ability {
 	public MobClass currentClass;

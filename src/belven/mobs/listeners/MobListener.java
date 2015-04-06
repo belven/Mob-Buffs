@@ -15,10 +15,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import belven.mob.classes.Sapper;
+import belven.mob.classes.Warrior;
 import belven.mobs.MobBuffManager;
-import belven.mobs.Warrior;
 import belven.mobs.resources.functions;
 import belven.resources.EntityFunctions;
+import belven.resources.Functions;
 
 public class MobListener implements Listener {
 	private final MobBuffManager plugin;
@@ -34,7 +36,13 @@ public class MobListener implements Listener {
 
 		if (EntityFunctions.IsAMob(event.getEntityType())) {
 			LivingEntity le = event.getEntity();
-			plugin.AddMobClass(le, new Warrior(le.getMaxHealth() / 2, le, plugin));
+			int rand = new Random().nextInt(99);
+
+			if (Functions.numberBetween(rand, 10, 20)) {
+				plugin.AddMobClass(le, new Warrior(le.getMaxHealth() / 2, le, plugin));
+			} else { // if (Functions.numberBetween(rand, 20, 30)) {
+				plugin.AddMobClass(le, new Sapper(le.getMaxHealth() / 2, le, plugin));
+			}
 			//
 			// PotionEffectType positiveEffect = getPositiveEffect(le);
 			// int posAmplifier =
