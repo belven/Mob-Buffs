@@ -1,6 +1,5 @@
 package belven.mobs.listeners;
 
-import java.util.List;
 import java.util.Random;
 
 import org.bukkit.enchantments.Enchantment;
@@ -9,18 +8,13 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import belven.mob.classes.Sapper;
-import belven.mob.classes.Warrior;
 import belven.mobs.MobBuffManager;
-import belven.mobs.resources.functions;
 import belven.resources.EntityFunctions;
-import belven.resources.Functions;
 
 public class MobListener implements Listener {
 	private final MobBuffManager plugin;
@@ -31,42 +25,7 @@ public class MobListener implements Listener {
 		plugin = instance;
 	}
 
-	@EventHandler
-	public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
-
-		if (EntityFunctions.IsAMob(event.getEntityType())) {
-			LivingEntity le = event.getEntity();
-			int rand = new Random().nextInt(99);
-
-			if (Functions.numberBetween(rand, 10, 20)) {
-				plugin.AddMobClass(le, new Warrior(le.getMaxHealth() / 2, le, plugin));
-			} else { // if (Functions.numberBetween(rand, 20, 30)) {
-				plugin.AddMobClass(le, new Sapper(le.getMaxHealth() / 2, le, plugin));
-			}
-			//
-			// PotionEffectType positiveEffect = getPositiveEffect(le);
-			// int posAmplifier =
-			// functions.getPotionEffectMaxAmp(positiveEffect);
-			// int posDuration =
-			// functions.getPotionEffectMaxDuration(positiveEffect);
-			//
-			// PotionEffectType negativeEffect = getNegativeEffect(le);
-			// int negAmplifier =
-			// functions.getPotionEffectMaxAmp(positiveEffect);
-			// int negDuration =
-			// functions.getPotionEffectMaxDuration(positiveEffect);
-			//
-			// PotionEffect positive = new PotionEffect(positiveEffect,
-			// posDuration, posAmplifier);
-			//
-			// new PotionEffect(negativeEffect, negDuration, negAmplifier);
-			//
-			// le.addPotionEffect(positive, true);
-			// le.addPotionEffect(negative, true);
-		}
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 		LivingEntity damager = EntityFunctions.GetDamager(event);
 
@@ -81,16 +40,6 @@ public class MobListener implements Listener {
 			return;
 		}
 
-		// This entity has been hit
-		if (plugin.GetClass(damageEntity) != null) {
-			plugin.GetClass(damageEntity).SelfTakenDamage(event);
-		}
-
-		// This entity hit something
-		if (plugin.GetClass(damager) != null) {
-			plugin.GetClass(damager).SelfDamageOther(event);
-		}
-
 		double maxPercent = getDamageToDo(damager, damageEntity);
 		double maxDamage = maxPercent * damagedEntity.getMaxHealth();
 
@@ -101,10 +50,7 @@ public class MobListener implements Listener {
 		} else {
 			damageEntity.setNoDamageTicks(20);
 		}
-
-		// damager.getEquipment().getItemInHand()
-		// .setDurability((short)
-		// (damager.getEquipment().getItemInHand().getDurability() - 10));
+		plugin.getServer().getLogger().info(String.valueOf(event.getDamage()));
 	}
 
 	public double getDamageToDo(LivingEntity damager, LivingEntity damageEntity) {
@@ -210,17 +156,17 @@ public class MobListener implements Listener {
 		return 0;
 	}
 
-	private PotionEffectType getPositiveEffect(LivingEntity le) {
-		List<PotionEffectType> tempEffects = functions.positiveEffectsForMobs();
-		int ran = randomGenerator.nextInt(tempEffects.size());
-		return tempEffects.get(ran);
-	}
-
-	private PotionEffectType getNegativeEffect(LivingEntity le) {
-		List<PotionEffectType> tempEffects = functions.negativeEffectsForMobs();
-		int ran = randomGenerator.nextInt(tempEffects.size());
-		return tempEffects.get(ran);
-	}
+	// private PotionEffectType getPositiveEffect(LivingEntity le) {
+	// List<PotionEffectType> tempEffects = functions.positiveEffectsForMobs();
+	// int ran = randomGenerator.nextInt(tempEffects.size());
+	// return tempEffects.get(ran);
+	// }
+	//
+	// private PotionEffectType getNegativeEffect(LivingEntity le) {
+	// List<PotionEffectType> tempEffects = functions.negativeEffectsForMobs();
+	// int ran = randomGenerator.nextInt(tempEffects.size());
+	// return tempEffects.get(ran);
+	// }
 
 	public MobBuffManager getPlugin() {
 		return plugin;
