@@ -25,11 +25,11 @@ public class MobListener implements Listener {
 		plugin = instance;
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 		LivingEntity damager = EntityFunctions.GetDamager(event);
 
-		if (!(event.getEntity() instanceof LivingEntity)) {
+		if (!(event.getEntity() instanceof LivingEntity) || event.getDamage() <= 0) {
 			return;
 		}
 
@@ -43,6 +43,7 @@ public class MobListener implements Listener {
 		double maxPercent = getDamageToDo(damager, damageEntity);
 		double maxDamage = maxPercent * damagedEntity.getMaxHealth();
 
+		// plugin.getServer().getLogger().info(String.valueOf("Damage dealt before: " + event.getDamage()));
 		event.setDamage(maxDamage);
 
 		if (EntityFunctions.IsAMob(damagedEntity.getType())) {
@@ -50,7 +51,7 @@ public class MobListener implements Listener {
 		} else {
 			damageEntity.setNoDamageTicks(20);
 		}
-		plugin.getServer().getLogger().info(String.valueOf(event.getDamage()));
+		// plugin.getServer().getLogger().info(String.valueOf("Damage dealt after: " + event.getDamage()));
 	}
 
 	public double getDamageToDo(LivingEntity damager, LivingEntity damageEntity) {
