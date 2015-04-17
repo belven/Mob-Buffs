@@ -2,8 +2,10 @@ package belven.mobs.listeners;
 
 import java.util.Random;
 
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Damageable;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,21 +31,16 @@ public class MobListener implements Listener {
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 		LivingEntity damager = EntityFunctions.GetDamager(event);
 
-		if (!(event.getEntity() instanceof LivingEntity) || event.getDamage() <= 0) {
+		if (!(event.getEntity() instanceof LivingEntity) || event.getDamage() <= 0 || damager == null) {
 			return;
 		}
 
 		LivingEntity damageEntity = (LivingEntity) event.getEntity();
 		Damageable damagedEntity = damageEntity;
 
-		if (damager == null) {
-			return;
-		}
-
-		double maxPercent = getDamageToDo(damager, damageEntity);
+		double maxPercent = getDamageToDo(damager, damageEntity, event);
 		double maxDamage = maxPercent * damagedEntity.getMaxHealth();
 
-		// plugin.getServer().getLogger().info(String.valueOf("Damage dealt before: " + event.getDamage()));
 		event.setDamage(maxDamage);
 
 		if (EntityFunctions.IsAMob(damagedEntity.getType())) {
@@ -54,16 +51,22 @@ public class MobListener implements Listener {
 		// plugin.getServer().getLogger().info(String.valueOf("Damage dealt after: " + event.getDamage()));
 	}
 
-	public double getDamageToDo(LivingEntity damager, LivingEntity damageEntity) {
+	public double getDamageToDo(LivingEntity damager, LivingEntity damageEntity, EntityDamageByEntityEvent event) {
 		double baseDamage = 0.05;
 		double bonusDamage = getWeaponBonus(damager.getEquipment().getItemInHand());
+
+		if (damager.getEquipment().getItemInHand().getType() == Material.BOW
+				&& event.getDamager().getType() != EntityType.ARROW) {
+			bonusDamage = 0;
+		}
+
 		double armourReduction = getArmourReduction(damageEntity.getEquipment().getArmorContents());
 		double potionDamageBonus = getPotionDamageBonus(damager);
 		double potionArmourBonus = getPotionArmourBonus(damageEntity);
 
 		double finalDamage = baseDamage + bonusDamage + potionDamageBonus - armourReduction - potionArmourBonus;
 
-		return finalDamage > 0 ? finalDamage : 0.05;
+		return finalDamage > 0 ? finalDamage : 0.04;
 	}
 
 	private double getPotionArmourBonus(LivingEntity le) {
